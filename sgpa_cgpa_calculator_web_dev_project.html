@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA / CGPA Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 50%, #dfe5ed 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 193, 7, 0.4);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 193, 7, 0.6);
+        }
+
+        /* Home Button */
+        .home-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: 6px;
+            border: 2px solid rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.85rem; font-weight: 600;
+            text-decoration: none; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .home-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #0066cc;
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left p {
+            color: #e0e8f0;
+            font-size: 0.9rem;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .header-btn {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn.active {
+            background: #ffffff;
+            border-color: #ffffff;
+            color: #1e3c72;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Tabs */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            display: block;
+            color: #2c3e50;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .control-group select,
+        .control-group input {
+            padding: 0.75rem;
+            background: #ffffff;
+            border: 2px solid #bdc3c7;
+            color: #1a1a1a;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: 'Segoe UI', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .control-group select:hover,
+        .control-group input:hover {
+            border-color: #0066cc;
+            background: #f8f9fa;
+        }
+
+        .control-group select:focus,
+        .control-group input:focus {
+            outline: none;
+            border-color: #0066cc;
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 102, 204, 0.2);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border: 2px solid #e0e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card:hover {
+            background: #ffffff;
+            border-color: #0066cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+        }
+
+        .stat-card.cgpa {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-color: #0066cc;
+        }
+
+        .stat-card.sgpa {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #27ae60;
+        }
+
+        .stat-label {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card.sgpa .stat-value {
+            color: #27ae60;
+        }
+
+        .stat-sub {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+        }
+
+        /* Courses Grid */
+        .courses-section {
+            margin-top: 2rem;
+        }
+
+        .courses-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            background: #ffffff;
+            border: 2px solid #e0e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .course-card:hover {
+            background: #f8f9fa;
+            border-color: #0066cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.12);
+        }
+
+        .course-header {
+            margin-bottom: 1rem;
+        }
+
+        .course-code {
+            color: #0066cc;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .course-title {
+            color: #1a1a1a;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+
+        .course-credits {
+            background: #e3f2fd;
+            color: #0066cc;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .course-card select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            background: #f8f9fa;
+            border: 2px solid #bdc3c7;
+            color: #1a1a1a;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .course-card select:hover {
+            background: #ffffff;
+            border-color: #0066cc;
+        }
+
+        .course-card select:focus {
+            outline: none;
+            background: #ffffff;
+            border-color: #0066cc;
+            box-shadow: 0 0 10px rgba(0, 102, 204, 0.2);
+        }
+
+        /* Dashboard */
+        .progress-card {
+            background: #ffffff;
+            border: 2px solid #e0e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            grid-column: 1 / -1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .progress-label {
+            color: #2c3e50;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .semester-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .semester-item {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid #0066cc;
+        }
+
+        .semester-item:hover {
+            background: #bbdefb;
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+        }
+
+        .semester-item span:last-child {
+            color: #0066cc;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .semester-item span:first-child {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .empty-message {
+            color: #5a6c7d;
+            font-size: 0.95rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Actions */
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            grid-column: 1 / -1;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 1rem;
+            border: 2px solid #bdc3c7;
+            background: #ffffff;
+            color: #1a1a1a;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn:hover {
+            background: #f8f9fa;
+            border-color: #0066cc;
+            color: #0066cc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+        }
+
+        .btn.success {
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+
+        .btn.success:hover {
+            background: #e8f5e9;
+            border-color: #27ae60;
+            color: #27ae60;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.15);
+        }
+
+        .btn.danger {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .btn.danger:hover {
+            background: #fadbd8;
+            border-color: #e74c3c;
+            color: #e74c3c;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-left h1 {
+                font-size: 1.8rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .course-card {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        .course-card:nth-child(2) {
+            animation-delay: 0.05s;
+        }
+
+        .course-card:nth-child(3) {
+            animation-delay: 0.1s;
+        }
+
+        .course-card:nth-child(4) {
+            animation-delay: 0.15s;
+        }
+
+        .course-card:nth-child(5) {
+            animation-delay: 0.2s;
+        }
+
+        .course-card:nth-child(6) {
+            animation-delay: 0.25s;
+        }
+
+        .course-card:nth-child(7) {
+            animation-delay: 0.3s;
+        }
+
+        .course-card:nth-child(8) {
+            animation-delay: 0.35s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-left" style="display:flex;align-items:center;gap:16px;">
+                <a href="index.html" class="home-btn">← Home</a>
+                <div>
+                    <h1>SGPA / CGPA Calculator</h1>
+                    <p>B.Tech Computer Science &amp; Engineering</p>
+                </div>
+            </div>
+            <div class="header-buttons">
+                <button class="header-btn active" onclick="switchTab('grades')">📝 Enter Grades</button>
+                <button class="header-btn" onclick="switchTab('dashboard')">📊 Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Grades Tab -->
+        <div id="grades" class="tab-content active">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="year-select">Year</label>
+                    <select id="year-select" onchange="updateSemesters()">
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="sem-select">Semester</label>
+                    <select id="sem-select" onchange="document.getElementById('search-input').value = ''; updateCourses();"></select>
+                </div>
+                <div class="control-group">
+                    <label for="search-input">🔍 Search Courses</label>
+                    <input type="text" id="search-input" placeholder="Search by code, title, or credits..." onkeyup="filterCourses()">
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card sgpa">
+                    <div class="stat-label">Current Semester GPA</div>
+                    <div class="stat-value" id="current-sgpa">0.00</div>
+                    <div class="stat-sub">Semester GPA</div>
+                </div>
+                <div class="stat-card cgpa">
+                    <div class="stat-label">Overall CGPA</div>
+                    <div class="stat-value" id="current-cgpa">0.00</div>
+                    <div class="stat-sub">Cumulative GPA</div>
+                </div>
+            </div>
+
+            <div class="courses-section">
+                <h2>Courses</h2>
+                <div class="courses-grid" id="courses-container"></div>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card cgpa">
+                    <div class="stat-label">Overall CGPA</div>
+                    <div class="stat-value" id="dash-cgpa">0.00</div>
+                    <div class="stat-sub">All Semesters</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Progress</div>
+                    <div class="stat-value" id="completed-count">0</div>
+                    <div class="stat-sub">Semesters Completed</div>
+                </div>
+            </div>
+
+            <div class="progress-card">
+                <div class="progress-label">Semester Summary</div>
+                <div class="semester-list" id="semester-summary-container">
+                    <div class="empty-message">No semesters with grades yet</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn success" onclick="exportData()">📥 Export Data</button>
+                <button class="btn danger" onclick="clearData()">🗑️ Clear All Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // GRADE POINTS MAPPING
+        // ========================================
+        // Maps each grade letter to its point value
+        var gradePoints = {
+            'S': 10,
+            'A': 9,
+            'B': 8,
+            'C': 7,
+            'D': 6,
+            'P': 5,
+            'F': 0
+        };
+
+        // ========================================
+        // CURRICULUM DATA - All courses for all semesters
+        // ========================================
+        var curriculum = {
+            1: {
+                1: [
+                    { code: 'MA1161', title: 'Linear Algebra, Calculus and ODE', credits: 3 },
+                    { code: 'PH1161', title: 'Engineering Physics', credits: 4 },
+                    { code: 'HS1161', title: 'English for Technical Communication', credits: 3 },
+                    { code: 'CS1101', title: 'Programming and Data Structures', credits: 3 },
+                    { code: 'BT1161', title: 'Biology for Engineers', credits: 2 },
+                    { code: 'CS1103', title: 'Programming and Data Structures Lab', credits: 2 }
+                ],
+                2: [
+                    { code: 'MA1162', title: 'Integral and Vector Calculus, Laplace and Fourier Transforms', credits: 3 },
+                    { code: 'EE1161', title: 'Basic Electrical & Electronics Engineering', credits: 3 },
+                    { code: 'CS1102', title: 'Design Thinking', credits: 3 },
+                    { code: 'CS1104', title: 'Optimization Techniques', credits: 3 },
+                    { code: 'CS1106', title: 'Data Structures and Algorithms', credits: 4 },
+                    { code: 'CS1108', title: 'Web Programming Lab', credits: 2 },
+                    { code: 'CS1110', title: 'Mathematical Foundations of CS', credits: 3 }
+                ]
+            },
+            2: {
+                3: [
+                    { code: 'MA1264', title: 'Probability and Statistics', credits: 3 },
+                    { code: 'EC1263', title: 'Computer Organization and Architecture', credits: 4 },
+                    { code: 'CS1201', title: 'Theory of Computation', credits: 4 },
+                    { code: 'CS1203', title: 'Design and Analysis of Algorithms', credits: 3 },
+                    { code: 'CS1205', title: 'Object Oriented Programming', credits: 3 },
+                    { code: 'CS1207', title: 'OOP Laboratory', credits: 2 },
+                    { code: 'CS1209', title: 'Statistical Tools Practice', credits: 2 }
+                ],
+                4: [
+                    { code: 'MS1262', title: 'Business Essentials for Engineers', credits: 3 },
+                    { code: 'CS1202', title: 'Compiler Design', credits: 4 },
+                    { code: 'CS1204', title: 'Software Engineering', credits: 4 },
+                    { code: 'CS1206', title: 'Database Management Systems', credits: 3 },
+                    { code: 'CS1208', title: 'Operating Systems', credits: 3 },
+                    { code: 'CS1210', title: 'Database Systems Laboratory', credits: 2 },
+                    { code: 'CS1212', title: 'Operating Systems Laboratory', credits: 2 }
+                ]
+            },
+            3: {
+                5: [
+                    { code: 'CS1301', title: 'Data Warehousing and Data Mining', credits: 4 },
+                    { code: 'CS1303', title: 'Full Stack Development', credits: 4 },
+                    { code: 'CS1305', title: 'Computer Networks', credits: 3 },
+                    { code: 'CS1307', title: 'Distributed Computing', credits: 3 },
+                    { code: 'CS13XX', title: 'Professional Elective - I', credits: 3 },
+                    { code: 'CS1381', title: 'Fractal Course - I', credits: 0.5 },
+                    { code: 'CS1309', title: 'Computer Networks Laboratory', credits: 2 },
+                    { code: 'CS1311', title: 'Knowledge Engineering Laboratory', credits: 2 }
+                ],
+                6: [
+                    { code: 'CS1302', title: 'Cryptography and Network Security', credits: 4 },
+                    { code: 'CS1304', title: 'Machine Learning', credits: 3 },
+                    { code: 'CS13XX-2', title: 'Professional Elective - II', credits: 3 },
+                    { code: 'CS13XX-3', title: 'Professional Elective - III', credits: 3 },
+                    { code: 'CS1306', title: 'Product Development', credits: 3 },
+                    { code: 'CS1382', title: 'Fractal Course - II', credits: 0.5 },
+                    { code: 'CS1308', title: 'Cryptography and Network Security Lab', credits: 2 },
+                    { code: 'CS1310', title: 'Machine Learning Laboratory', credits: 2 }
+                ]
+            },
+            4: {
+                7: [
+                    { code: 'CS1401', title: 'High Performance Computing', credits: 3 },
+                    { code: 'CS14XX', title: 'Professional Elective - IV', credits: 3 },
+                    { code: 'CS14XX-2', title: 'Professional Elective - V', credits: 3 },
+                    { code: 'OE1', title: 'Open Elective - I', credits: 2 },
+                    { code: 'CS1403', title: 'HPC Laboratory', credits: 2 },
+                    { code: 'CS1489', title: 'Seminar and Technical Writing', credits: 2 },
+                    { code: 'CS1495', title: 'Minor Project', credits: 2 },
+                    { code: 'CS1491', title: 'Short Term Industrial/EPICS/Research', credits: 2 }
+                ],
+                8: [
+                    { code: 'CS14XX-3', title: 'Professional Elective - VI', credits: 3 },
+                    { code: 'CS14XX-4', title: 'Professional Elective - VII', credits: 3 },
+                    { code: 'CS14XX-5', title: 'Professional Elective - VIII', credits: 3 },
+                    { code: 'CS1498', title: 'Major Project', credits: 6 }
+                ]
+            }
+        };
+
+        // ========================================
+        // GLOBAL VARIABLES
+        // ========================================
+        // Store all grade data loaded from browser storage
+        var grades = {};
+
+        // Load grades from browser's localStorage on startup
+        function loadGradesFromStorage() {
+            var savedData = localStorage.getItem('sgpaCgpaData');
+            if (savedData !== null) {
+                grades = JSON.parse(savedData);
+            } else {
+                grades = {};
+            }
+        }
+
+        // ========================================
+        // HELPER FUNCTIONS
+        // ========================================
+        
+        // Create a unique key for storing each course's grade
+        // Example: "sem1_CS1101" for Semester 1, CS1101 course
+        function getKey(semester, courseCode) {
+            var key = 'sem' + semester + '_' + courseCode;
+            return key;
+        }
+
+        // Save a single course grade to storage
+        function setGrade(semester, courseCode, gradeValue) {
+            var key = getKey(semester, courseCode);
+            
+            if (gradeValue === '') {
+                // If grade is empty, remove it
+                delete grades[key];
+            } else {
+                // Save the grade
+                grades[key] = gradeValue;
+            }
+            
+            // Save to browser storage
+            localStorage.setItem('sgpaCgpaData', JSON.stringify(grades));
+            
+            // Update all calculations
+            updateCalculations();
+        }
+
+        // Get a course's saved grade
+        function getGrade(semester, courseCode) {
+            var key = getKey(semester, courseCode);
+            if (grades[key]) {
+                return grades[key];
+            } else {
+                return '';
+            }
+        }
+
+        // ========================================
+        // CALCULATION FUNCTIONS
+        // ========================================
+
+        // Calculate SGPA (Semester GPA) for a specific semester
+        // Formula: (Sum of Credits × Grade Points) / Total Credits
+        function calculateSGPA(semester) {
+            var totalCredits = 0;
+            var totalPoints = 0;
+
+            // Loop through all years
+            for (var year in curriculum) {
+                // Check if this semester exists in this year
+                if (curriculum[year][semester]) {
+                    var courseList = curriculum[year][semester];
+                    
+                    // Loop through each course in this semester
+                    for (var i = 0; i < courseList.length; i++) {
+                        var course = courseList[i];
+                        var savedGrade = getGrade(semester, course.code);
+                        
+                        if (savedGrade !== '') {
+                            // Add to total credits
+                            totalCredits = totalCredits + course.credits;
+                            
+                            // Add to total points (credits × grade points)
+                            var gradePoint = gradePoints[savedGrade];
+                            var coursePoints = course.credits * gradePoint;
+                            totalPoints = totalPoints + coursePoints;
+                        }
+                    }
+                }
+            }
+
+            // Calculate SGPA
+            if (totalCredits > 0) {
+                var sgpa = totalPoints / totalCredits;
+                return sgpa.toFixed(2);
+            } else {
+                return '0.00';
+            }
+        }
+
+        // Calculate CGPA (Cumulative GPA) for all semesters
+        // Formula: (Sum of all Credits × Grade Points) / Total Credits across all semesters
+        function calculateCGPA() {
+            var totalCredits = 0;
+            var totalPoints = 0;
+
+            // Loop through all years
+            for (var year in curriculum) {
+                // Loop through all semesters in this year
+                for (var sem in curriculum[year]) {
+                    var courseList = curriculum[year][sem];
+                    
+                    // Loop through each course
+                    for (var i = 0; i < courseList.length; i++) {
+                        var course = courseList[i];
+                        var savedGrade = getGrade(sem, course.code);
+                        
+                        if (savedGrade !== '') {
+                            // Add to total credits
+                            totalCredits = totalCredits + course.credits;
+                            
+                            // Add to total points
+                            var gradePoint = gradePoints[savedGrade];
+                            var coursePoints = course.credits * gradePoint;
+                            totalPoints = totalPoints + coursePoints;
+                        }
+                    }
+                }
+            }
+
+            // Calculate CGPA
+            if (totalCredits > 0) {
+                var cgpa = totalPoints / totalCredits;
+                return cgpa.toFixed(2);
+            } else {
+                return '0.00';
+            }
+        }
+
+        // ========================================
+        // UI UPDATE FUNCTIONS
+        // ========================================
+
+        // Update all SGPA and CGPA displays
+        function updateCalculations() {
+            var selectedSemester = document.getElementById('sem-select').value;
+            var sgpaValue = calculateSGPA(selectedSemester);
+            var cgpaValue = calculateCGPA();
+            
+            // Update display elements
+            document.getElementById('current-sgpa').textContent = sgpaValue;
+            document.getElementById('current-cgpa').textContent = cgpaValue;
+            document.getElementById('dash-cgpa').textContent = cgpaValue;
+            
+            // Update semester summary in dashboard
+            updateSemesterSummary();
+        }
+
+        // Update semester dropdown when year changes
+        function updateSemesters() {
+            var selectedYear = document.getElementById('year-select').value;
+            var semesterSelect = document.getElementById('sem-select');
+            
+            // Clear all options
+            semesterSelect.innerHTML = '';
+            
+            // Get all semesters for this year
+            var semestersInYear = curriculum[selectedYear];
+            
+            // Add each semester as an option
+            for (var semester in semestersInYear) {
+                var option = document.createElement('option');
+                option.value = semester;
+                option.textContent = 'Semester ' + semester;
+                semesterSelect.appendChild(option);
+            }
+            
+            // Clear search and load courses for new semester
+            document.getElementById('search-input').value = '';
+            updateCourses();
+        }
+
+        // Display all courses for selected semester
+        function updateCourses() {
+            var selectedYear = document.getElementById('year-select').value;
+            var selectedSemester = document.getElementById('sem-select').value;
+            var courseContainer = document.getElementById('courses-container');
+            
+            // Clear the container
+            courseContainer.innerHTML = '';
+            
+            // Get courses for this semester
+            var courseList = curriculum[selectedYear][selectedSemester];
+            
+            // Loop through each course and create a card
+            for (var i = 0; i < courseList.length; i++) {
+                var course = courseList[i];
+                var savedGrade = getGrade(selectedSemester, course.code);
+                
+                // Create course card element
+                var courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                
+                // Build grade options
+                var gradeOptions = '<option value="">Select Grade</option>';
+                for (var grade in gradePoints) {
+                    var points = gradePoints[grade];
+                    var isSelected = (savedGrade === grade) ? 'selected' : '';
+                    gradeOptions += '<option value="' + grade + '" ' + isSelected + '>' + grade + ' (' + points + ' pts)</option>';
+                }
+                
+                // Set course card HTML
+                courseCard.innerHTML = 
+                    '<div class="course-header">' +
+                    '<div class="course-code">' + course.code + '</div>' +
+                    '<div class="course-title">' + course.title + '</div>' +
+                    '<span class="course-credits">' + course.credits + ' Credits</span>' +
+                    '</div>' +
+                    '<select onchange="setGrade(' + selectedSemester + ', \'' + course.code + '\', this.value)" value="' + savedGrade + '">' +
+                    gradeOptions +
+                    '</select>';
+                
+                // Add card to container
+                courseContainer.appendChild(courseCard);
+            }
+            
+            // Update calculations
+            updateCalculations();
+        }
+
+        // Filter courses based on search input
+        function filterCourses() {
+            var searchInput = document.getElementById('search-input');
+            var searchQuery = searchInput.value.toLowerCase().trim();
+            var selectedYear = document.getElementById('year-select').value;
+            var selectedSemester = document.getElementById('sem-select').value;
+            var courseContainer = document.getElementById('courses-container');
+            
+            // If search is empty, show all courses
+            if (searchQuery === '') {
+                updateCourses();
+                return;
+            }
+            
+            // Get all courses for this semester
+            var courseList = curriculum[selectedYear][selectedSemester];
+            courseContainer.innerHTML = '';
+            
+            var matchCount = 0;
+            
+            // Loop through courses and filter
+            for (var i = 0; i < courseList.length; i++) {
+                var course = courseList[i];
+                var savedGrade = getGrade(selectedSemester, course.code);
+                
+                // Check if search matches course code, title, or credits
+                var codeMatches = course.code.toLowerCase().indexOf(searchQuery) !== -1;
+                var titleMatches = course.title.toLowerCase().indexOf(searchQuery) !== -1;
+                var creditsMatch = course.credits.toString() === searchQuery;
+                
+                if (codeMatches || titleMatches || creditsMatch) {
+                    // Build grade options
+                    var gradeOptions = '<option value="">Select Grade</option>';
+                    for (var grade in gradePoints) {
+                        var points = gradePoints[grade];
+                        var isSelected = (savedGrade === grade) ? 'selected' : '';
+                        gradeOptions += '<option value="' + grade + '" ' + isSelected + '>' + grade + ' (' + points + ' pts)</option>';
+                    }
+                    
+                    // Create course card
+                    var courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    courseCard.innerHTML = 
+                        '<div class="course-header">' +
+                        '<div class="course-code">' + course.code + '</div>' +
+                        '<div class="course-title">' + course.title + '</div>' +
+                        '<span class="course-credits">' + course.credits + ' Credits</span>' +
+                        '</div>' +
+                        '<select onchange="setGrade(' + selectedSemester + ', \'' + course.code + '\', this.value)" value="' + savedGrade + '">' +
+                        gradeOptions +
+                        '</select>';
+                    
+                    courseContainer.appendChild(courseCard);
+                    matchCount++;
+                }
+            }
+            
+            // Show message if no matches found
+            if (matchCount === 0) {
+                courseContainer.innerHTML = 
+                    '<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #5a6c7d;">' +
+                    '<div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>' +
+                    '<p style="font-size: 1.1rem; font-weight: 500;">No courses found matching "' + searchQuery + '"</p>' +
+                    '<p style="font-size: 0.9rem; margin-top: 0.5rem;">Try searching by course code (e.g., CS1101), title, or credits</p>' +
+                    '</div>';
+            }
+        }
+
+        // Update dashboard semester summary
+        function updateSemesterSummary() {
+            var container = document.getElementById('semester-summary-container');
+            var semesterArray = [];
+            
+            // Collect all semesters that have grades
+            for (var year in curriculum) {
+                for (var sem in curriculum[year]) {
+                    var courseList = curriculum[year][sem];
+                    var hasGrades = false;
+                    
+                    // Check if any course in this semester has a grade
+                    for (var i = 0; i < courseList.length; i++) {
+                        var course = courseList[i];
+                        if (getGrade(sem, course.code) !== '') {
+                            hasGrades = true;
+                            break;
+                        }
+                    }
+                    
+                    if (hasGrades) {
+                        var sgpa = calculateSGPA(sem);
+                        semesterArray.push({
+                            year: year,
+                            semester: sem,
+                            sgpa: sgpa
+                        });
+                    }
+                }
+            }
+            
+            // Update semester count
+            document.getElementById('completed-count').textContent = semesterArray.length;
+            
+            // Display semester summary
+            if (semesterArray.length === 0) {
+                container.innerHTML = '<div class="empty-message">No semesters with grades yet</div>';
+            } else {
+                container.innerHTML = '';
+                
+                for (var i = 0; i < semesterArray.length; i++) {
+                    var semesterData = semesterArray[i];
+                    var semesterItem = document.createElement('div');
+                    semesterItem.className = 'semester-item';
+                    semesterItem.innerHTML = 
+                        '<span>Year ' + semesterData.year + ', Semester ' + semesterData.semester + '</span>' +
+                        '<span>' + semesterData.sgpa + '</span>';
+                    
+                    container.appendChild(semesterItem);
+                }
+            }
+        }
+
+        // ========================================
+        // TAB SWITCHING
+        // ========================================
+
+        // Switch between Grades and Dashboard tabs
+        function switchTab(tabName) {
+            var allTabs = document.querySelectorAll('.tab-content');
+            var allButtons = document.querySelectorAll('.header-btn');
+            
+            // Hide all tabs
+            for (var i = 0; i < allTabs.length; i++) {
+                allTabs[i].classList.remove('active');
+            }
+            
+            // Remove active class from all buttons
+            for (var i = 0; i < allButtons.length; i++) {
+                allButtons[i].classList.remove('active');
+            }
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // ========================================
+        // EXPORT AND DELETE FUNCTIONS
+        // ========================================
+
+        // Export all grades to JSON file
+        function exportData() {
+            var exportData = {
+                timestamp: new Date().toLocaleString(),
+                cgpa: calculateCGPA(),
+                semesters: []
+            };
+            
+            // Loop through all years and semesters
+            for (var year in curriculum) {
+                for (var sem in curriculum[year]) {
+                    var courseList = curriculum[year][sem];
+                    var semesterCourses = [];
+                    
+                    // Collect course data
+                    for (var i = 0; i < courseList.length; i++) {
+                        var course = courseList[i];
+                        var savedGrade = getGrade(sem, course.code);
+                        
+                        semesterCourses.push({
+                            code: course.code,
+                            title: course.title,
+                            credits: course.credits,
+                            grade: (savedGrade !== '') ? savedGrade : 'N/A'
+                        });
+                    }
+                    
+                    exportData.semesters.push({
+                        year: parseInt(year),
+                        semester: parseInt(sem),
+                        sgpa: calculateSGPA(sem),
+                        courses: semesterCourses
+                    });
+                }
+            }
+            
+            // Create file
+            var dataString = JSON.stringify(exportData, null, 2);
+            var dataBlob = new Blob([dataString], { type: 'application/json' });
+            var url = URL.createObjectURL(dataBlob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'sgpa-cgpa-' + Date.now() + '.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Clear all saved data
+        function clearData() {
+            var confirmed = confirm('⚠️ Are you sure you want to delete all saved grades? This action cannot be undone.');
+            
+            if (confirmed) {
+                grades = {};
+                localStorage.removeItem('sgpaCgpaData');
+                updateCourses();
+                updateSemesterSummary();
+                alert('✓ All data has been cleared!');
+            }
+        }
+
+        // ========================================
+        // PAGE INITIALIZATION
+        // ========================================
+
+        // Run when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGradesFromStorage();
+            updateSemesters();
+            updateSemesterSummary();
+        });
+    </script>
+</body>
+</html>

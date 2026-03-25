@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NITW Campus Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #07090e;
+      --surface: rgba(15, 18, 28, 0.88);
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.14);
+      --accent: #4f7cff;
+      --accent2: #7c4fff;
+      --gold: #e8a020;
+      --green: #3dcc7e;
+      --orange: #ff8757;
+      --text: #edf1ff;
+      --muted: #9aa4c3;
+      --muted-2: #737d9d;
+      --shadow: 0 18px 50px rgba(0,0,0,0.35);
+      --radius: 20px;
+      --radius-lg: 28px;
+      --maxw: 1180px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(79,124,255,0.10), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(124,79,255,0.10), transparent 22%),
+        radial-gradient(circle at 50% 80%, rgba(232,160,32,0.06), transparent 24%),
+        linear-gradient(180deg, #07090e 0%, #090c13 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79, 124, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79, 124, 255, 0.035) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: 0;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.35));
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.9;
+    }
+    .orb-1 { width: 460px; height: 460px; top: -120px; left: -70px; background: radial-gradient(circle, rgba(79,124,255,0.18) 0%, transparent 70%); }
+    .orb-2 { width: 360px; height: 360px; right: -70px; top: 90px; background: radial-gradient(circle, rgba(124,79,255,0.16) 0%, transparent 70%); }
+    .orb-3 { width: 300px; height: 300px; bottom: 70px; left: 45%; background: radial-gradient(circle, rgba(232,160,32,0.09) 0%, transparent 70%); }
+
+    .page-shell { position: relative; z-index: 1; min-height: 100vh; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; height: 74px; padding: 0 28px; background: rgba(8, 10, 16, 0.72);
+      backdrop-filter: blur(18px); border-bottom: 1px solid var(--border);
+    }
+    .nav-left, .nav-right, .nav-logo { display: flex; align-items: center; }
+    .nav-right { gap: 10px; }
+    .nav-logo { gap: 12px; text-decoration: none; color: inherit; }
+    .nav-logo-icon {
+      width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; background: linear-gradient(135deg, rgba(79,124,255,0.95), rgba(124,79,255,0.95));
+      box-shadow: 0 10px 28px rgba(79,124,255,0.28); border: 1px solid rgba(255,255,255,0.18);
+    }
+    .nav-logo-text { display: flex; flex-direction: column; gap: 2px; }
+    .nav-logo-text strong { font-family: 'Syne', sans-serif; font-size: 1.08rem; font-weight: 800; letter-spacing: -0.4px; color: var(--text); }
+    .nav-logo-text span { font-size: 0.68rem; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted-2); }
+    .nav-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted);
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px; white-space: nowrap;
+    }
+    .nav-pill.accent { color: #dfe8ff; border-color: rgba(79,124,255,0.28); background: rgba(79,124,255,0.09); }
+
+    .container { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+    .hero { position: relative; padding: 72px 0 38px; }
+    .hero-panel { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr); gap: 28px; align-items: stretch; }
+
+    .hero-copy, .hero-side {
+      background: linear-gradient(180deg, rgba(16,20,31,0.94), rgba(12,16,25,0.88));
+      border: 1px solid var(--border); box-shadow: var(--shadow); position: relative; overflow: hidden;
+    }
+    .hero-copy {
+      border-radius: var(--radius-lg); padding: 34px 34px 30px; min-height: 460px; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hero-copy::before, .hero-side::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 22%, transparent 70%, rgba(255,255,255,0.03));
+    }
+    .hero-top { position: relative; z-index: 1; min-width: 0; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 2.8px; text-transform: uppercase; color: var(--accent); background: rgba(79,124,255,0.08);
+      border: 1px solid rgba(79,124,255,0.22); border-radius: 999px; padding: 8px 16px; margin-bottom: 22px;
+    }
+    .hero-title {
+      font-family: 'Syne', sans-serif; font-size: clamp(2.1rem, 4.8vw, 4.7rem); font-weight: 800;
+      line-height: 0.92; letter-spacing: -1.8px; margin-bottom: 20px; max-width: 100%; overflow: visible;
+    }
+    .hero-title .line-1, .hero-title .line-2 { display: block; overflow-wrap: anywhere; }
+    .hero-title .line-1 { color: var(--text); }
+    .hero-title .line-2 {
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 55%, var(--gold) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub { font-size: 1.05rem; color: var(--muted); max-width: 56ch; line-height: 1.75; margin-bottom: 28px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 26px; }
+    .hero-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 13px 18px; border-radius: 14px; text-decoration: none;
+      font-size: 0.92rem; font-weight: 700; transition: transform 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s; border: 1px solid transparent;
+    }
+    .hero-btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; box-shadow: 0 14px 32px rgba(79,124,255,0.28); }
+    .hero-btn.secondary { background: rgba(255,255,255,0.04); color: var(--text); border-color: var(--border-strong); }
+    .hero-btn:hover { transform: translateY(-2px); }
+
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+    .meta-chip {
+      display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 999px; font-size: 0.78rem;
+      font-weight: 600; color: var(--muted); background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.08); white-space: nowrap;
+    }
+    .meta-chip b { color: var(--text); }
+
+    .hero-bottom { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 28px; }
+    .hero-stat { padding: 16px 16px 15px; border-radius: 18px; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.07); }
+    .hero-stat strong { display: block; font-family: 'Syne', sans-serif; font-size: 1.45rem; font-weight: 800; margin-bottom: 4px; }
+    .hero-stat span { font-size: 0.8rem; color: var(--muted); }
+
+    .hero-side { border-radius: 26px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
+    .side-top, .side-bottom { position: relative; z-index: 1; }
+    .side-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .mini-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .mini-card { padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.07); min-height: 108px; }
+    .mini-card .icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; font-size: 18px; }
+    .mini-card.mart .icon { background: rgba(61,204,126,0.12); color: var(--green); }
+    .mini-card.blog .icon { background: rgba(232,160,32,0.12); color: var(--gold); }
+    .mini-card.calc .icon { background: rgba(79,124,255,0.12); color: var(--accent); }
+    .mini-card.food .icon { background: rgba(255,135,87,0.12); color: var(--orange); }
+    .mini-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 5px; color: var(--text); }
+    .mini-card p { font-size: 0.78rem; line-height: 1.5; color: var(--muted); }
+
+    .spotlight {
+      border-radius: 22px; padding: 18px;
+      background: linear-gradient(180deg, rgba(79,124,255,0.12), rgba(79,124,255,0.03)), rgba(255,255,255,0.02);
+      border: 1px solid rgba(79,124,255,0.18);
+    }
+    .spotlight small { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 2px; text-transform: uppercase; color: #b7c7ff; margin-bottom: 10px; }
+    .spotlight h3 { font-family: 'Syne', sans-serif; font-size: 1.28rem; line-height: 1.15; margin-bottom: 10px; }
+    .spotlight p { font-size: 0.86rem; line-height: 1.65; color: var(--muted); margin-bottom: 14px; }
+    .spotlight-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 30px 0 18px; }
+    .section-head-left small { display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted-2); margin-bottom: 8px; }
+    .section-head-left h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.5rem); letter-spacing: -1px; line-height: 1.05; }
+    .section-head p { max-width: 440px; color: var(--muted); line-height: 1.65; font-size: 0.92rem; text-align: right; }
+
+    .cards-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; padding-bottom: 88px; }
+    .card {
+      position: relative; display: flex; flex-direction: column; min-height: 380px; padding: 28px; border-radius: 24px;
+      background: linear-gradient(180deg, rgba(16,20,31,0.94), rgba(12,15,24,0.9)); border: 1px solid var(--border);
+      text-decoration: none; color: inherit; overflow: hidden; transition: transform 0.28s, border-color 0.28s, box-shadow 0.28s; box-shadow: 0 14px 36px rgba(0,0,0,0.22);
+    }
+    .card::before { content: ''; position: absolute; inset: 0; background: var(--card-glow); opacity: 0; transition: opacity 0.32s ease; pointer-events: none; }
+    .card:hover { transform: translateY(-8px); border-color: var(--card-color); box-shadow: 0 24px 64px var(--card-shadow); }
+    .card:hover::before { opacity: 1; }
+    .card-mart { --card-color: rgba(61,204,126,0.42); --card-shadow: rgba(61,204,126,0.16); --card-glow: radial-gradient(circle at top left, rgba(61,204,126,0.16), transparent 52%); }
+    .card-blog { --card-color: rgba(232,160,32,0.42); --card-shadow: rgba(232,160,32,0.16); --card-glow: radial-gradient(circle at top left, rgba(232,160,32,0.16), transparent 52%); }
+    .card-calc { --card-color: rgba(79,124,255,0.42); --card-shadow: rgba(79,124,255,0.18); --card-glow: radial-gradient(circle at top left, rgba(79,124,255,0.18), transparent 52%); }
+    .card-food { --card-color: rgba(255,135,87,0.42); --card-shadow: rgba(255,135,87,0.16); --card-glow: radial-gradient(circle at top left, rgba(255,135,87,0.16), transparent 52%); }
+    .card-top, .card-middle, .card-bottom { position: relative; z-index: 1; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+    .card-icon-wrap { width: 62px; height: 62px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; border: 1px solid rgba(255,255,255,0.08); }
+    .card-mart .card-icon-wrap { background: rgba(61,204,126,0.12); color: var(--green); }
+    .card-blog .card-icon-wrap { background: rgba(232,160,32,0.12); color: var(--gold); }
+    .card-calc .card-icon-wrap { background: rgba(79,124,255,0.12); color: var(--accent); }
+    .card-food .card-icon-wrap { background: rgba(255,135,87,0.12); color: var(--orange); }
+    .card-badge { padding: 8px 12px; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); white-space: nowrap; }
+    .card-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; letter-spacing: 2.6px; text-transform: uppercase; font-weight: 600; margin-bottom: 12px; }
+    .card-mart .card-tag { color: var(--green); }
+    .card-blog .card-tag { color: var(--gold); }
+    .card-calc .card-tag { color: var(--accent); }
+    .card-food .card-tag { color: var(--orange); }
+    .card-title { font-family: 'Syne', sans-serif; font-size: 1.55rem; line-height: 1.15; letter-spacing: -0.6px; margin-bottom: 12px; color: var(--text); }
+    .card-desc { color: var(--muted); font-size: 0.92rem; line-height: 1.7; min-height: 96px; }
+    .card-points { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+    .point { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: #d7def7; }
+    .point::before { content: '•'; font-size: 1rem; color: var(--card-color); }
+    .card-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 4px 0 18px; position: relative; z-index: 1; }
+    .card-stat-row { display: flex; gap: 18px; margin-bottom: 22px; }
+    .card-stat-num { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--text); }
+    .card-stat-label { font-size: 0.72rem; color: var(--muted-2); }
+    .card-footer-row { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 14px; position: relative; z-index: 1; }
+    .card-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.3px; padding: 6px 11px; border-radius: 999px; border: 1px solid transparent; }
+    .card-mart .pill { background: rgba(61,204,126,0.1); color: var(--green); border-color: rgba(61,204,126,0.16); }
+    .card-blog .pill { background: rgba(232,160,32,0.1); color: var(--gold); border-color: rgba(232,160,32,0.16); }
+    .card-calc .pill { background: rgba(79,124,255,0.1); color: var(--accent); border-color: rgba(79,124,255,0.16); }
+    .card-food .pill { background: rgba(255,135,87,0.1); color: var(--orange); border-color: rgba(255,135,87,0.16); }
+    .card-arrow { flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+
+    .footer-band { margin-bottom: 34px; padding: 18px 20px; border-radius: 20px; background: linear-gradient(180deg, rgba(16,20,31,0.86), rgba(11,14,22,0.9)); border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 18px; color: var(--muted); box-shadow: 0 12px 30px rgba(0,0,0,0.18); }
+    .footer-band strong { color: var(--text); }
+    .footer-band small { font-family: 'JetBrains Mono', monospace; color: var(--muted-2); letter-spacing: 1px; }
+    footer { text-align: center; padding: 0 24px 38px; color: var(--muted-2); font-size: 0.84rem; }
+
+    @media (max-width: 1200px) {
+      .hero-title { font-size: clamp(1.8rem, 4vw, 3.6rem); letter-spacing: -1.3px; }
+      .cards-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 1050px) {
+      .hero-panel { grid-template-columns: 1fr; }
+      .hero-copy { min-height: auto; }
+      .section-head { flex-direction: column; align-items: flex-start; }
+      .section-head p { text-align: left; }
+    }
+    @media (max-width: 760px) {
+      nav { height: auto; padding: 14px 16px; flex-wrap: wrap; }
+      .nav-right { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+      .container { padding: 0 16px; }
+      .hero { padding: 42px 0 20px; }
+      .hero-copy, .hero-side { padding: 22px; border-radius: 22px; }
+      .hero-title { font-size: clamp(2rem, 9vw, 3rem); line-height: 0.98; letter-spacing: -1px; }
+      .hero-bottom, .mini-grid, .cards-row { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .hero-btn { justify-content: center; }
+      .card { min-height: auto; padding: 22px; }
+      .card-footer-row, .footer-band { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="page-shell">
+    <nav>
+      <div class="nav-left">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-icon">🎓</div>
+          <div class="nav-logo-text">
+            <strong>NITW Hub</strong>
+            <span>Student Campus Portal</span>
+          </div>
+        </a>
+      </div>
+      <div class="nav-right">
+        <div class="nav-pill accent">2026 Edition</div>
+        <div class="nav-pill">NIT Warangal</div>
+      </div>
+    </nav>
+
+    <main class="container">
+      <section class="hero">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <div class="hero-top">
+              <div class="hero-eyebrow">One portal for campus life</div>
+              <h1 class="hero-title">
+                <span class="line-1">NITW</span>
+                <span class="line-2">Campus Hub</span>
+              </h1>
+              <p class="hero-sub">
+                Explore essential campus tools from one modern hub — order daily items, catch up on campus happenings, discover food spots, and keep your academic progress on track without jumping between pages.
+              </p>
+
+              <div class="hero-actions">
+                <a href="mart.html" class="hero-btn primary">Open NIT-W Mart ↗</a>
+                <a href="NITWfoodexplorer.html" class="hero-btn secondary">Open Food Explorer ↗</a>
+                <a href="#explore" class="hero-btn secondary">Explore modules ↓</a>
+              </div>
+
+              <div class="hero-meta">
+                <div class="meta-chip"><b>Fast access</b> to all four modules</div>
+                <div class="meta-chip"><b>Clean UI</b> built for students</div>
+                <div class="meta-chip"><b>Single hub</b> for campus flow</div>
+              </div>
+            </div>
+
+            <div class="hero-bottom">
+              <div class="hero-stat">
+                <strong>4</strong>
+                <span>core student tools</span>
+              </div>
+              <div class="hero-stat">
+                <strong>8</strong>
+                <span>semesters to track</span>
+              </div>
+              <div class="hero-stat">
+                <strong>24/7</strong>
+                <span>quick campus access</span>
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-side">
+            <div class="side-top">
+              <div class="side-label">What’s inside</div>
+              <div class="mini-grid">
+                <div class="mini-card mart">
+                  <div class="icon">🛒</div>
+                  <h3>Mart</h3>
+                  <p>Daily essentials, snacks, groceries, and cart checkout.</p>
+                </div>
+                <div class="mini-card blog">
+                  <div class="icon">📰</div>
+                  <h3>Chronicle</h3>
+                  <p>Campus posts, news, discussions, and student updates.</p>
+                </div>
+                <div class="mini-card calc">
+                  <div class="icon">📊</div>
+                  <h3>Calculator</h3>
+                  <p>Semester GPA, CGPA, progress tracking, and export.</p>
+                </div>
+                <div class="mini-card food">
+                  <div class="icon">🍽️</div>
+                  <h3>Food Explorer</h3>
+                  <p>Discover food spots in and around NIT Warangal.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="side-bottom">
+              <div class="spotlight">
+                <small>Quick spotlight</small>
+                <h3>Start with the module you need right now.</h3>
+                <p>
+                  Whether you’re checking grades, buying essentials, browsing campus updates, or deciding where to eat, this page gets you there in one click.
+                </p>
+                <div class="spotlight-row">
+                  <span>Simple. Fast. Student-friendly.</span>
+                  <b>↗</b>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="explore">
+        <div class="section-head">
+          <div class="section-head-left">
+            <small>Explore modules</small>
+            <h2>Choose your campus workflow</h2>
+          </div>
+          <p>
+            The links and behavior stay exactly the same — the landing page now includes Food Explorer as a single fourth module.
+          </p>
+        </div>
+
+        <div class="cards-row">
+          <a href="mart.html" class="card card-mart">
+            <div class="card-top">
+              <div class="card-icon-wrap">🛒</div>
+              <div class="card-badge">Fast checkout</div>
+            </div>
+            <div class="card-middle">
+              <div class="card-tag">Campus Store</div>
+              <div class="card-title">NIT-W Mart</div>
+              <div class="card-desc">Browse groceries, snacks, dairy, and everyday essentials in a clean shopping flow built for quick campus orders.</div>
+              <div class="card-points">
+                <div class="point">Search products instantly</div>
+                <div class="point">Filter by category</div>
+                <div class="point">Add to cart and place orders</div>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-bottom">
+              <div class="card-stat-row">
+                <div class="card-stat"><span class="card-stat-num">9+</span><span class="card-stat-label">Products</span></div>
+                <div class="card-stat"><span class="card-stat-num">4</span><span class="card-stat-label">Categories</span></div>
+              </div>
+              <div class="card-footer-row">
+                <div class="card-pills"><span class="pill">Snacks</span><span class="pill">Dairy</span><span class="pill">Daily</span></div>
+                <div class="card-arrow">↗</div>
+              </div>
+            </div>
+          </a>
+
+          <a href="blog.html" class="card card-blog">
+            <div class="card-top">
+              <div class="card-icon-wrap">📰</div>
+              <div class="card-badge">Live campus feed</div>
+            </div>
+            <div class="card-middle">
+              <div class="card-tag">Campus News</div>
+              <div class="card-title">Campus Chronicle</div>
+              <div class="card-desc">Stay updated with campus events, fests, club activity, placement buzz, and community conversations all in one place.</div>
+              <div class="card-points">
+                <div class="point">Follow student updates</div>
+                <div class="point">Read trending posts</div>
+                <div class="point">Vote and comment on discussions</div>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-bottom">
+              <div class="card-stat-row">
+                <div class="card-stat"><span class="card-stat-num">Live</span><span class="card-stat-label">Feed</span></div>
+                <div class="card-stat"><span class="card-stat-num">6+</span><span class="card-stat-label">Topics</span></div>
+              </div>
+              <div class="card-footer-row">
+                <div class="card-pills"><span class="pill">Events</span><span class="pill">Placements</span><span class="pill">Clubs</span></div>
+                <div class="card-arrow">↗</div>
+              </div>
+            </div>
+          </a>
+
+          <a href="sgpa_cgpa_calculator_web_dev_project.html" class="card card-calc">
+            <div class="card-top">
+              <div class="card-icon-wrap">📊</div>
+              <div class="card-badge">Academic tracker</div>
+            </div>
+            <div class="card-middle">
+              <div class="card-tag">Academics</div>
+              <div class="card-title">SGPA / CGPA Calculator</div>
+              <div class="card-desc">Enter semester grades, monitor progress across years, and view your academic performance in a clear dashboard.</div>
+              <div class="card-points">
+                <div class="point">Track semester GPA</div>
+                <div class="point">Monitor cumulative CGPA</div>
+                <div class="point">Export records anytime</div>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-bottom">
+              <div class="card-stat-row">
+                <div class="card-stat"><span class="card-stat-num">4</span><span class="card-stat-label">Years</span></div>
+                <div class="card-stat"><span class="card-stat-num">8</span><span class="card-stat-label">Semesters</span></div>
+              </div>
+              <div class="card-footer-row">
+                <div class="card-pills"><span class="pill">B.Tech CSE</span><span class="pill">Dashboard</span></div>
+                <div class="card-arrow">↗</div>
+              </div>
+            </div>
+          </a>
+
+          <a href="NITWfoodexplorer.html" class="card card-food">
+            <div class="card-top">
+              <div class="card-icon-wrap">🍽️</div>
+              <div class="card-badge">Campus food guide</div>
+            </div>
+            <div class="card-middle">
+              <div class="card-tag">Food & Dining</div>
+              <div class="card-title">NITW Food Explorer</div>
+              <div class="card-desc">Explore food spots inside campus and nearby, then jump into the dedicated Food Explorer experience.</div>
+              <div class="card-points">
+                <div class="point">See inside-campus food spots</div>
+                <div class="point">Explore places around NITW</div>
+                <div class="point">Open the original site unchanged</div>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-bottom">
+              <div class="card-stat-row">
+                <div class="card-stat"><span class="card-stat-num">2</span><span class="card-stat-label">Food zones</span></div>
+                <div class="card-stat"><span class="card-stat-num">New</span><span class="card-stat-label">Module</span></div>
+              </div>
+              <div class="card-footer-row">
+                <div class="card-pills"><span class="pill">Inside</span><span class="pill">Around</span><span class="pill">Reviews</span></div>
+                <div class="card-arrow">↗</div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <div class="footer-band">
+        <div><strong>NITW Campus Hub</strong> brings together shopping, updates, food discovery, and academics in one polished starting point.</div>
+        <small>Built for students · NIT Warangal · 2026</small>
+      </div>
+    </main>
+
+    <footer>
+      NITW Campus Hub · Built for students, by students · NIT Warangal · 2026
+    </footer>
+  </div>
+</body>
+</html>

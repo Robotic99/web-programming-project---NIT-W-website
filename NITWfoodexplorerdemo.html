@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NITW Food Explorer</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Times New Roman', Times, serif;
+}
+
+
+.home-btn{
+position:absolute;
+top:24px;
+left:24px;
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:10px 18px;
+border-radius:999px;
+background:rgba(255,255,255,0.18);
+color:white;
+text-decoration:none;
+font-size:16px;
+font-weight:bold;
+backdrop-filter:blur(8px);
+border:1px solid rgba(255,255,255,0.28);
+box-shadow:0 8px 20px rgba(0,0,0,0.15);
+transition:0.3s;
+z-index:20;
+}
+
+.home-btn:hover{
+background:rgba(255,255,255,0.28);
+transform:translateY(-2px);
+}
+
+/* Landing Page */
+
+#landing{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ff9966,#ff5e62);
+color:white;
+text-align:center;
+}
+
+#landing h1{
+font-size:70px;
+margin-bottom:20px;
+letter-spacing:2px;
+color:beige;
+}
+
+#landing p{
+font-size:22px;
+margin-bottom:40px;
+}
+
+#landing p1{
+    font-size:32px;
+    margin-bottom:40px;
+    color:beige;
+}
+
+#landing button{
+padding:15px 35px;
+font-size:18px;
+border:none;
+border-radius:30px;
+background:beige;
+color:black;
+cursor:pointer;
+transition:0.3s;
+}
+
+#landing button:hover{
+transform:scale(1.1);
+}
+
+/* Main Page */
+
+#main{
+display:none;
+background:white;
+min-height:100vh;
+padding-bottom:50px;
+}
+
+header{
+text-align:left;
+padding:80px 20px;   
+font-size:36px;      
+font-weight:bold;
+color:white;
+
+}
+
+.container{
+  width:90%;
+  margin:auto;
+  margin-top:30px;
+
+  display:flex;
+  flex-wrap:wrap;        /* allows cards to go side by side */
+  justify-content:center;
+  gap:25px;
+}
+
+.card{
+  width:300px;   /* controls how many cards fit per row */
+  background:rgba(255,255,255,0.95);
+  border-radius:15px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  overflow:hidden;
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.card-content{
+padding:15px;
+}
+.card-content h2{
+margin-bottom:8px;
+font-size:20px;
+}
+.food-img-wrapper{
+  width:100%;
+  height:180px;          /* fixed height = uniform cards */
+  overflow:hidden;
+  position:relative;
+  border-top-left-radius:15px;
+  border-top-right-radius:15px;
+}
+
+
+.food-img-wrapper::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:60px;
+  background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+}
+
+
+.food-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;      /* KEY: makes image fill nicely */
+  display:block;
+}
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 12px 25px rgba(0,0,0,0.25);
+}
+
+.card h2{
+margin-bottom:10px;
+color:#333; /* dark text instead of white */
+}
+
+.rating span{
+font-size:25px;
+cursor:pointer;
+color:#ccc;
+}
+
+.rating span:hover{
+color:#ffb400; /* warm gold */
+}
+
+textarea{
+width:100%;
+height:60px;
+margin-top:10px;
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+background:#fff;
+}
+
+button.commentBtn{
+margin-top:10px;
+padding:10px 18px;
+border:none;
+background:black;
+color:white;
+border-radius:20px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button.commentBtn:hover{
+background:#ff4040;
+transform:scale(1.05);
+}
+
+.comment{
+background:#ffe5d9;
+padding:10px;
+border-radius:10px;
+margin-top:8px;
+color:#333;
+}
+
+.avg{
+margin-top:10px;
+font-weight:bold;
+}
+
+
+
+#landing{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:white;
+
+/* background image */
+
+background-image:
+linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),
+url("https://media.telanganatoday.com/wp-content/uploads/2025/11/NIT-warangal-1.jpg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+#categoryPage{
+display:none;
+min-height:100vh;
+padding:60px 20px;
+font-family: 'Poppins', sans-serif;
+
+/* Background Image + Overlay */
+
+background-image:
+linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+url("https://st4.depositphotos.com/4590583/28491/i/450/depositphotos_284911950-stock-photo-background-cooking-black-wooden-background.jpg");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+}
+
+.category-title{
+text-align:center;
+font-size:42px;
+font-weight:800;
+margin-bottom:50px;
+color:#ffffff;
+text-shadow:2px 2px 10px rgba(0,0,0,0.8);
+}
+
+.place-card{
+background:rgba(255,255,255,0.95); /* slight transparency */
+}
+
+.card-container{
+display:flex;
+justify-content:center;
+gap:60px;
+}
+
+.place-card{
+width:320px;
+background:white;
+border-radius:15px;
+box-shadow:0 6px 20px rgba(0,0,0,0.2);
+overflow:hidden;              
+text-align:center;
+padding-bottom:20px;
+transition:0.3s;
+}
+
+.place-card:hover{
+transform:translateY(-10px);
+}
+
+.card-img{
+width:100%;
+height:180px;
+object-fit:cover;             
+display:block;
+}
+
+.place-card h2{
+margin-top:15px;
+}
+
+.place-card p{
+padding:0 15px;
+margin-top:8px;
+color:#555;
+}
+
+.place-card button{
+padding:10px 20px;
+border:none;
+background:#ff5e62;
+color:white;
+border-radius:25px;
+cursor:pointer;
+}
+
+.backBtn{
+margin:20px 10px;
+padding:10px 20px;
+font-size:16px;
+border:none;
+border-radius:20px;
+background:black;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+.backBtn:hover{
+background:#ff4040;
+transform:scale(1.05);
+}
+
+.inside-header{
+background-image:
+url("https://img.freepik.com/free-photo/vegetables-with-salt-corn-cob_1220-687.jpg?semt=ais_rp_progressive&w=740&q=80");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+
+letter-spacing:2px;
+text-shadow:3px 3px 10px rgba(0,0,0,0.8);
+border-bottom-left-radius:20px;
+border-bottom-right-radius:20px;}
+
+.around-header{
+background-image:
+url("https://img.freepik.com/free-photo/barbecue-grilled-beef-steak-meat-with-asparagus-tomato-top-view_2829-16876.jpg?semt=ais_rp_progressive&w=740&q=80");
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+
+letter-spacing:2px;
+text-shadow:3px 3px 10px rgba(0,0,0,0.8);
+border-bottom-left-radius:20px;
+border-bottom-right-radius:20px
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Landing Page -->
+
+<div id="landing">
+<a href="index.html" class="home-btn">← Home</a>
+
+<h1>Campus Cravings</h1>
+<p>Tired of the mess?<br></p>
+<p>WE GOT YOU!<br></p>
+<p1><b>Discover the Best Food Spots In And Around NIT Warangal</b></p1>
+
+<button onclick="enterSite()">Explore Food Spots</button>
+
+</div>
+
+<!-- placecard -->
+
+<div id="categoryPage">
+
+<h1 class="category-title">What's on your mind today?</h1>
+
+<div class="card-container">
+
+<div class="place-card" onclick="openInside()">
+<img src="https://files.yappe.in/place/full/food-street-nitw-10420035.webp" class="card-img">
+<h2>🍽 Food Inside NITW</h2>
+<p>Explore canteens and food spots inside campus</p>
+</div>
+
+<div class="place-card" onclick="openAround()">
+<img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2e/e3/33/c6/aranyam-restaurant-ambiance.jpg?w=600&h=600&s=1" class="card-img">
+<h2>📍 Food Around NITW</h2>
+<p>Discover restaurants and street food near campus</p>
+</div>
+
+</div>
+</div>
+
+
+
+<!-- Main Website -->
+
+<!-- Inside NITW Page -->
+<div id="insidePage" style="display:none;">
+
+<a href="index.html" class="home-btn">← Home</a>
+<header class="inside-header">Food Spots Inside NITW</header>
+<button class="backBtn" onclick="goBack()">⬅ Back</button>
+<button class="backBtn" onclick="clearData()">Clear All Reviews</button>
+
+
+<div class="container">
+
+<!-- CARD 1 -->
+<div class="card" data-id="inside1">
+  <div class="food-img-wrapper">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdUDc7jCwTJDLHrgHH8wDogE_rWvut4pwJeg&s" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Madras Filter Coffee</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<!-- CARD 2 -->
+<div class="card" data-id="inside2">
+  <div class="food-img-wrapper">
+    <img src="https://img.etimg.com/thumb/width-420,height-315,imgsize-324407,resizemode-75,msid-74942388/industry/cons-products/food/amul-turnover-grows-17-to-rs-38550-crore-in-2019-20/amul-agencies.jpg" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Amul</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<!-- CARD 3 -->
+<div class="card" data-id="inside3">
+  <div class="food-img-wrapper">
+    <img src="https://png.pngtree.com/png-clipart/20250609/original/pngtree-fresh-fruit-juices-splashing-in-glasses-png-image_21147687.png" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Thirumala Juice Centre</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<!-- CARD 4 -->
+<div class="card" data-id="inside4">
+  <div class="food-img-wrapper">
+    <img src="https://spicecravings.com/wp-content/uploads/2020/12/Paneer-kathi-Roll-Featured-1.jpg" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Kathi Junction</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<!-- CARD 5 -->
+<div class="card" data-id="inside5">
+  <div class="food-img-wrapper">
+    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/77/f0/bb/country-oven.jpg?w=500&h=-1&s=1" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Country Oven</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<!-- CARD 6 -->
+<div class="card" data-id="inside6">
+  <div class="food-img-wrapper">
+    <img src="https://tb-static.uber.com/prod/image-proc/processed_images/2eaf7e3f98f3932f1e1013a41b1d8b89/5283d81c664b43c5f57a3a186d273063.jpeg" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Dominos</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+
+<!-- Around NITW Page -->
+<div id="aroundPage" style="display:none;">
+
+<a href="index.html" class="home-btn">← Home</a>
+<header class="around-header">Top Food Spots Around NITW</header>
+<button class="backBtn" onclick="goBack()">⬅ Back</button>
+<button class="backBtn" onclick="clearData()">Clear All Reviews</button>
+
+<div class="container">
+
+<div class="card" data-id="spot1">
+  <div class="food-img-wrapper">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEf3N3m5jUNE6RDPnOafkKWzmHl-PO6HeCrg&s" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Chef Table</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<div class="card" data-id="spot2">
+  <div class="food-img-wrapper">
+    <img src="https://pistahousefranchise.com/wp-content/uploads/2025/08/Pista-House-Logo-1.png" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Pista House</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<div class="card" data-id="spot3">
+  <div class="food-img-wrapper">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGT4oUUPL3JKS6Cy9LRh5YCLreK6oGaQJcow&s" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Pizza hut</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<div class="card" data-id="spot4">
+  <div class="food-img-wrapper">
+    <img src="https://platform65.in/wp-content/uploads/2023/11/walk-through-our-restaurant.webp" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Platform 65</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<div class="card" data-id="spot5">
+  <div class="food-img-wrapper">
+    <img src="https://content3.jdmagicbox.com/comp/warangal/d4/9999px870.x870.231117140934.z5d4/catalogue/aranyam-the-jungle-theme-restaurant-hanamkonda-warangal-restaurants-nhbhxisnnh.jpg" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Aranyam</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<div class="card" data-id="spot6">
+  <div class="food-img-wrapper">
+    <img src="https://dineout-media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/DINEOUT_ALL_RESTAURANTS/IMAGES/RESTAURANT_IMAGE_SERVICE/2025/12/8/0d1dfd6f-e483-4d3c-80ab-da60ee465f0c_image12a6311c75c117441b94213f397b4e241d.JPG" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Papadams blue</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<div class="card" data-id="spot7">
+  <div class="food-img-wrapper">
+    <img src="https://content3.jdmagicbox.com/v2/comp/warangal/c7/9999px870.x870.231111111900.x5c7/catalogue/papilio-waddepally-warangal-coffee-shops-b4aqscr374.jpg" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>Papilio</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+<div class="card" data-id="spot7">
+  <div class="food-img-wrapper">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfv6s4qOZS2qlL3gw7X40mF-veon_UAQ1ADw&s" class="food-img">
+  </div>
+
+  <div class="card-content">
+    <h2>By The Brew</h2>
+    <div class="rating">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+    <div class="avg"></div>
+    <textarea placeholder="Write a comment..."></textarea>
+    <button class="commentBtn" onclick="addComment(this)">Post Comment</button>
+    <div class="comments"></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+function enterSite(){
+document.getElementById("landing").style.display="none";
+document.getElementById("main").style.display="block";
+}
+
+/* Rating */
+
+document.querySelectorAll(".rating span").forEach(star=>{
+
+star.addEventListener("click",function(){
+
+let rating=this.getAttribute("data-value");
+let card=this.closest(".card");
+let id=card.getAttribute("data-id");
+
+let ratings=JSON.parse(localStorage.getItem(id+"_ratings"))||[];
+ratings.push(Number(rating));
+
+localStorage.setItem(id+"_ratings",JSON.stringify(ratings));
+
+displayAverage(card,id);
+
+});
+
+});
+
+function displayAverage(card,id){
+
+let ratings=JSON.parse(localStorage.getItem(id+"_ratings"))||[];
+
+if(ratings.length==0) return;
+
+let avg=ratings.reduce((a,b)=>a+b,0)/ratings.length;
+
+card.querySelector(".avg").innerText=
+"Average Rating: "+avg.toFixed(1)+" ⭐ ("+ratings.length+" reviews)";
+
+}
+
+/* Comments */
+
+function addComment(btn){
+
+let card=btn.closest(".card");
+let id=card.getAttribute("data-id");
+
+let textarea=card.querySelector("textarea");
+let text=textarea.value;
+
+if(text.trim()=="") return;
+
+let comments=JSON.parse(localStorage.getItem(id+"_comments"))||[];
+comments.push(text);
+
+localStorage.setItem(id+"_comments",JSON.stringify(comments));
+
+textarea.value="";
+
+loadComments(card,id);
+
+}
+
+function loadComments(card,id){
+
+let comments=JSON.parse(localStorage.getItem(id+"_comments"))||[];
+
+let container=card.querySelector(".comments");
+container.innerHTML="";
+
+comments.forEach(c=>{
+let div=document.createElement("div");
+div.className="comment";
+div.innerText=c;
+container.appendChild(div);
+});
+
+}
+
+function init(){
+
+document.querySelectorAll(".card").forEach(card=>{
+let id=card.getAttribute("data-id");
+displayAverage(card,id);
+loadComments(card,id);
+});
+
+}
+
+init();
+
+</script>
+
+<script>
+
+function enterSite(){
+document.getElementById("landing").style.display="none";
+document.getElementById("categoryPage").style.display="block";
+}
+
+function openInside(){
+document.getElementById("categoryPage").style.display="none";
+document.getElementById("insidePage").style.display="block";
+init();
+}
+
+function openAround(){
+document.getElementById("categoryPage").style.display="none";
+document.getElementById("aroundPage").style.display="block";
+init();
+}
+
+function goBack(){
+document.getElementById("insidePage").style.display="none";
+document.getElementById("aroundPage").style.display="none";
+document.getElementById("categoryPage").style.display="block";
+}
+
+function clearData(){
+localStorage.clear();
+location.reload();
+}
+
+
+</script>
+
+</body>
+</html>

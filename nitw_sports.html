@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NIT Warangal Sports</title>
+    <style>
+
+        /* ── RESET ── */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── PAGE SWITCHING ── */
+        .page { display: none; }
+
+        /* ════════════════════════════
+           PAGE 1 — index.html
+        ════════════════════════════ */
+        #page-landing {
+            min-height: 100vh;
+            font-family: Arial;
+            background: linear-gradient(to right, #0f2027, #2c5364);
+            color: white;
+            text-align: center;
+        }
+
+        #page-landing h1 {
+            margin-top: 30px;
+            font-size: 40px;
+        }
+
+        #page-landing .container {
+            margin-top: 40px;
+        }
+
+        #page-landing .rules {
+            background: white;
+            color: black;
+            width: 60%;
+            margin: auto;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: left;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        #page-landing .rules h2 {
+            text-align: center;
+        }
+
+        #page-landing .rules ul {
+            line-height: 1.8;
+        }
+
+        #page-landing button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            background: #00c6ff;
+            color: black;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #page-landing button:hover {
+            background: #0072ff;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* ════════════════════════════
+           PAGE 2 — login.html
+        ════════════════════════════ */
+        #page-login {
+            min-height: 100vh;
+            font-family: Arial;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+        #page-login .login-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            width: 320px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .login-box input:focus {
+            box-shadow: 0 0 5px #00c6ff;
+        }
+
+        .login-box button {
+            width: 95%;
+            padding: 10px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #00c6ff;
+            color: black;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-box button:hover {
+            background: #0072ff;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .login-footer {
+            margin-top: 15px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* ════════════════════════════
+           PAGE 3 — sport.html + style.css
+        ════════════════════════════ */
+        #page-sports {
+            font-family: Arial;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        #page-sports h1 {
+            padding-top: 30px;
+            font-size: 36px;
+        }
+
+        .sports {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        .sport {
+            background: white;
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            width: 150px;
+            transition: 0.3s;
+            margin: 10px;
+        }
+
+        .sport:hover {
+            transform: scale(1.1);
+        }
+
+        .sport img {
+            width: 130px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .sport h3 { margin: 8px 0 4px; font-size: 0.9rem; }
+        .sport p  { font-size: 0.8rem; }
+
+        .sport button {
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #203a43;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .sport button:hover {
+            background: #2c5364;
+        }
+
+        /* Booking form */
+        .form-box {
+            display: none;
+            background: white;
+            color: black;
+            padding: 20px;
+            width: 320px;
+            margin: 20px auto;
+            border-radius: 10px;
+            text-align: left;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
+        }
+
+        .form-box h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .form-box h3 {
+            margin-top: 12px;
+            font-size: 0.95rem;
+        }
+
+        .form-box input {
+            display: block;
+            margin: 8px auto;
+            padding: 8px;
+            width: 90%;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .form-box input:focus {
+            border-color: #00c6ff;
+        }
+
+        .form-box p {
+            padding-left: 10px;
+            font-size: 0.85rem;
+            margin: 4px 0;
+        }
+
+        .form-box-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            padding: 0 10px;
+        }
+
+        .form-box-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-confirm { background: #203a43; color: white; }
+        .btn-confirm:hover { background: #0f2027; }
+
+        .btn-reset { background: #ddd; color: #333; }
+        .btn-reset:hover { background: #bbb; }
+
+        .btn-cancel { background: #e74c3c; color: white; }
+        .btn-cancel:hover { background: #c0392b; }
+
+        #result          { color: green; font-weight: bold; padding-left: 10px; margin-top: 10px; font-size: 0.9rem; }
+        #timeResult      { color: #333;  padding-left: 10px; font-size: 0.85rem; }
+        #availabilityMsg { padding-left: 10px; font-size: 0.85rem; }
+        #limitMsg        { color: #555;  padding-left: 10px; font-size: 0.82rem; }
+        #slots           { color: #333;  padding-left: 10px; font-size: 0.82rem; }
+
+        /* ── SHARED NAV BAR ── */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 22px;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ccc;
+            font-family: Arial, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .nav-page-title {
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 0.3px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ══════════════════════════════
+         PAGE 1 : index.html
+    ══════════════════════════════ -->
+    <div id="page-landing" class="page">
+
+        <div class="top-nav">
+            <a href="index.html" class="nav-btn">← Home</a>
+            <span class="nav-page-title">🏟️ NIT Warangal Sports Facility</span>
+        </div>
+
+        <h1>🏟️ NIT Warangal Sports Facility</h1>
+
+        <div class="container">
+            <div class="rules">
+                <h2>📋 Rules &amp; Regulations</h2>
+                <ul>
+                    <li>✔ Only NIT Warangal students are allowed (valid college email required)</li>
+                    <li>✔ Carry your college ID card while using facilities</li>
+                    <li>✔ Maintain discipline and sportsmanship</li>
+                    <li>✔ Do not damage equipment or property</li>
+                    <li>✔ Follow time limits strictly (1 hr / 3 hrs)</li>
+                    <li>✔ No booking overlap allowed</li>
+                    <li>✔ Keep the playground clean</li>
+                    <li>✔ Respect other players and staff</li>
+                    <li>✔ Late arrival may result in cancellation</li>
+                </ul>
+            </div>
+            <button onclick="showPage('page-login')">🚀 Show Available Sports</button>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════
+         PAGE 2 : login.html
+    ══════════════════════════════ -->
+    <div id="page-login" class="page">
+
+        <div class="top-nav">
+            <button class="nav-btn" onclick="showPage('page-landing')">← Back</button>
+            <span class="nav-page-title">🔐 Login</span>
+        </div>
+
+        <div class="login-wrapper">
+        <div class="login-box">
+            <h2>🔐 Login</h2>
+
+            <form onsubmit="loginUser(event)">
+                <input type="email"    id="login-email"    placeholder="College Email">
+                <input type="password" id="login-password" placeholder="Password">
+                <button type="submit">Login</button>
+            </form>
+
+            <div class="login-footer">NIT Warangal Sports Facility</div>
+        </div>
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════
+         PAGE 3 : sport.html
+    ══════════════════════════════ -->
+    <div id="page-sports" class="page">
+
+        <div class="top-nav">
+            <button class="nav-btn" onclick="showPage('page-login')">← Back</button>
+            <span class="nav-page-title">🏟️ Sports Facility Booking</span>
+        </div>
+
+        <h1>🏟️ NIT Warangal Sports Facility Booking</h1>
+
+        <div class="sports">
+
+            <!-- Badminton -->
+            <div class="sport">
+                <div class="sport-img">
+                    <img src="https://www.shutterstock.com/image-photo/young-girl-badminton-athlete-jumping-600nw-2514274371.jpg" alt="Badminton">
+                </div>
+                <h3>🏸 Badminton</h3>
+                <p>Max Duration: 1 Hour</p>
+                <button onclick="openForm('Badminton', 1)">Book</button>
+            </div>
+
+            <!-- Cricket -->
+            <div class="sport">
+                <div class="sport-img">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-ZifdR4w0jgNEkpyA6tt1wmh7-Bz4JbwZsA&s" alt="Cricket">
+                </div>
+                <h3>🏏 Cricket</h3>
+                <p>Max Duration: 3 Hours</p>
+                <button onclick="openForm('Cricket', 3)">Book</button>
+            </div>
+
+            <!-- Volleyball -->
+            <div class="sport">
+                <div class="sport-img">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwFSaqFPzcWjD_QD2XL5fJLd89iXmqkWxjfQ&s" alt="Volleyball">
+                </div>
+                <h3>🏐 Volleyball</h3>
+                <p>Max Duration: 1 Hour</p>
+                <button onclick="openForm('Volleyball', 1)">Book</button>
+            </div>
+
+            <!-- Basketball -->
+            <div class="sport">
+                <div class="sport-img">
+                    <img src="https://img.freepik.com/free-photo/authentic-scenes-plus-size-males-playing-basketball_52683-145026.jpg?w=360" alt="Basketball">
+                </div>
+                <h3>🏀 Basketball</h3>
+                <p>Max Duration: 1 Hour</p>
+                <button onclick="openForm('Basketball', 1)">Book</button>
+            </div>
+
+            <!-- Football -->
+            <div class="sport">
+                <div class="sport-img">
+                    <img src="https://akm-img-a-in.tosshub.com/indiatoday/images/media_bank/202309/ronaldo--messi-075003462-1x1.jpg?VersionId=JS9IEbeiG5DIyoo_LsNa1qj7f2WvOp77" alt="Football">
+                </div>
+                <h3>⚽ Football</h3>
+                <p>Max Duration: 3 Hours</p>
+                <button onclick="openForm('Football', 3)">Book</button>
+            </div>
+
+        </div>
+
+        <!-- Booking Form -->
+        <div id="bookingBox" class="form-box">
+            <h2 id="sportTitle"></h2>
+
+            <input type="text"   id="name"      placeholder="Your Name">
+            <input type="text"   id="phone"     placeholder="Phone Number">
+            <input type="email"  id="email"     placeholder="College Email ID">
+            <input type="time"   id="startTime" onchange="checkAvailability()">
+
+            <p id="availabilityMsg"></p>
+
+            <input type="number" id="hours" placeholder="Enter Hours" min="1">
+
+            <p id="limitMsg"></p>
+            <p id="timeResult"></p>
+
+            <h3>Available Slots</h3>
+            <p id="slots"></p>
+
+            <div class="form-box-buttons">
+                <button class="btn-confirm" onclick="bookFacility()">Confirm Booking</button>
+                <button class="btn-reset"   onclick="resetForm()">Reset Form</button>
+                <button class="btn-cancel"  onclick="closeForm()">Cancel</button>
+            </div>
+
+            <p id="result"></p>
+        </div>
+
+    </div>
+
+    <script>
+
+        /* ── PAGE NAVIGATION ── */
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(function(p) {
+                p.style.display = 'none';
+            });
+            document.getElementById(id).style.display = 'block';
+        }
+
+        // Show landing page on load
+        showPage('page-landing');
+
+        /* ── LOGIN ── */
+        function loginUser(e) {
+            e.preventDefault();
+
+            var email    = document.getElementById("login-email").value;
+            var password = document.getElementById("login-password").value;
+
+            if (!email.endsWith("@nitw.ac.in")) {
+                alert("Use college email");
+                return;
+            }
+            if (password === "") {
+                alert("Enter password");
+                return;
+            }
+
+            showPage('page-sports');
+        }
+
+        /* ── BOOKING LOGIC (script.js) ── */
+        var selectedSport = "";
+        var maxHours = 0;
+
+        var bookedSlots = {
+            "Badminton":  ["10:00", "14:00"],
+            "Cricket":    ["09:00"],
+            "Volleyball": ["11:00"],
+            "Basketball": [],
+            "Football":   ["16:00"]
+        };
+
+        function openForm(sport, limit) {
+            selectedSport = sport;
+            maxHours = limit;
+
+            document.getElementById("bookingBox").style.display = "block";
+            document.getElementById("sportTitle").innerText = sport + " Booking";
+
+            var hoursInput = document.getElementById("hours");
+            hoursInput.max = maxHours;
+            hoursInput.value = "";
+
+            document.getElementById("name").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("startTime").value = "";
+
+            document.getElementById("limitMsg").innerHTML = "⏳ Max booking allowed: " + maxHours + " hour(s)";
+            document.getElementById("availabilityMsg").innerHTML = "";
+            document.getElementById("timeResult").innerHTML = "";
+            document.getElementById("result").innerHTML = "";
+
+            showAvailableSlots();
+        }
+
+        function closeForm() {
+            document.getElementById("bookingBox").style.display = "none";
+        }
+
+        function showAvailableSlots() {
+            var allSlots  = ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"];
+            var booked    = bookedSlots[selectedSport] || [];
+            var available = allSlots.filter(function(slot) { return !booked.includes(slot); });
+
+            document.getElementById("slots").innerHTML =
+                available.length > 0
+                    ? "Available: " + available.join(" , ")
+                    : "No slots available";
+        }
+
+        function checkAvailability() {
+            var startTime = document.getElementById("startTime").value;
+            if (startTime === "") return;
+
+            var booked = bookedSlots[selectedSport] || [];
+            var msg    = document.getElementById("availabilityMsg");
+
+            if (booked.includes(startTime)) {
+                msg.innerHTML   = "❌ Slot Not Available";
+                msg.style.color = "red";
+            } else {
+                msg.innerHTML   = "✅ Slot Available";
+                msg.style.color = "green";
+            }
+        }
+
+        function calculateEndTime(startTime, hours) {
+            var parts = startTime.split(":").map(Number);
+            var start = new Date();
+            start.setHours(parts[0], parts[1], 0);
+            var end = new Date(start.getTime() + hours * 3600000);
+            return end.getHours().toString().padStart(2, '0') + ":" +
+                   end.getMinutes().toString().padStart(2, '0');
+        }
+
+        function resetForm() {
+            document.getElementById("name").value      = "";
+            document.getElementById("phone").value     = "";
+            document.getElementById("email").value     = "";
+            document.getElementById("startTime").value = "";
+            document.getElementById("hours").value     = "";
+
+            document.getElementById("limitMsg").innerHTML        = "";
+            document.getElementById("availabilityMsg").innerHTML = "";
+            document.getElementById("timeResult").innerHTML      = "";
+            document.getElementById("result").innerHTML          = "";
+
+            showAvailableSlots();
+        }
+
+        function bookFacility() {
+            var name      = document.getElementById("name").value;
+            var phone     = document.getElementById("phone").value;
+            var email     = document.getElementById("email").value;
+            var startTime = document.getElementById("startTime").value;
+            var hours     = parseInt(document.getElementById("hours").value);
+
+            if (name === "")                    { alert("Enter name"); return; }
+            if (!/^\d{10}$/.test(phone))        { alert("Enter valid phone number"); return; }
+            if (!email.endsWith("@nitw.ac.in")) { alert("Enter valid NIT Warangal email"); return; }
+            if (startTime === "")               { alert("Select start time"); return; }
+            if (!hours || hours <= 0)           { alert("Enter valid hours"); return; }
+            if (hours > maxHours)               { alert("Max allowed: " + maxHours + " hour(s)"); return; }
+
+            if ((bookedSlots[selectedSport] || []).includes(startTime)) {
+                alert("❌ Slot Not Available");
+                return;
+            }
+
+            var endTime = calculateEndTime(startTime, hours);
+
+            if (!bookedSlots[selectedSport]) bookedSlots[selectedSport] = [];
+            bookedSlots[selectedSport].push(startTime);
+
+            document.getElementById("result").innerHTML     = "✅ " + selectedSport + " booked successfully";
+            document.getElementById("timeResult").innerHTML = "⏰ Booking from " + startTime + " to " + endTime;
+            document.getElementById("availabilityMsg").innerHTML = "";
+
+            showAvailableSlots();
+        }
+
+    </script>
+
+</body>
+</html>
